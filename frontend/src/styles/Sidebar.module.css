@@ -1,0 +1,233 @@
+.sidebar {
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-right: 1px solid #e5e7eb;
+  position: fixed;
+  inset: 0 auto 0 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 20;
+}
+
+.brand {
+  background: #1e3a8a;
+  color: white;
+  padding: 2rem 1.75rem 1.5rem;
+  border-bottom: 1px solid #374151;
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 1.35rem;
+  line-height: 1.2;
+}
+
+.brand p {
+  margin: 0.5rem 0 0;
+  font-size: 0.8rem;
+  opacity: 0.9;
+}
+
+.roleLabel {
+  margin: 1.4rem 1.75rem;
+  padding: 0.95rem 1.2rem;
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
+  border-radius: 1.5rem;
+  color: #1e40af;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.roleSwitcher {
+  margin: 1.4rem 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.95rem 1.2rem;
+  width: calc(100% - 3.5rem);
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
+  border-radius: 1.5rem;
+  color: #1e40af;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.roleSwitcher:hover {
+  background: #e0e7ff;
+}
+
+.caret {
+  font-size: 0.9rem;
+}
+
+.nav {
+  padding: 0 0.75rem;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.navItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-bottom: 0.45rem;
+  padding: 0.9rem 1.2rem;
+  border: none;
+  background: transparent;
+  color: #334155;
+  border-radius: 1.5rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+  font-size: 0.95rem;
+}
+
+.navItem:hover {
+  background: #f8fafc;
+  color: #1e3a8a;
+}
+
+.active {
+  background: #e0e7ff;
+  color: #1e3a8a;
+  font-weight: 600;
+}
+
+.icon {
+  min-width: 1.4rem;
+  display: inline-flex;
+  justify-content: center;
+}
+
+.footer {
+  padding: 1.5rem 1.75rem 2rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.signout {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.95rem 1rem;
+  border: 1px solid #fecaca;
+  border-radius: 1.5rem;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.signout:hover {
+  background: #fee2e2;
+  border-color: #ef4444;
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 240px;
+  }
+
+  .brand {
+    padding: 1.5rem 1.5rem 1.25rem;
+  }
+
+  .brand h1 {
+    font-size: 1.15rem;
+  }
+
+  .brand p {
+    font-size: 0.75rem;
+  }
+
+  .roleLabel,
+  .roleSwitcher {
+    margin: 1rem 1.25rem;
+    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  .roleSwitcher {
+    width: calc(100% - 2.5rem);
+  }
+
+  .navItem {
+    padding: 0.75rem 1rem;
+    gap: 0.7rem;
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .footer {
+    padding: 1.25rem 1.25rem 1.5rem;
+  }
+}
+
+/* Small Tablet & Large Mobile */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px;
+  }
+
+  .brand {
+    padding: 1.25rem 1rem 1rem;
+  }
+
+  .brand h1 {
+    font-size: 1rem;
+  }
+
+  .brand p {
+    font-size: 0.7rem;
+  }
+
+  .roleLabel {
+    display: none;
+  }
+
+  .roleSwitcher {
+    display: none;
+  }
+
+  .nav {
+    padding: 0.5rem;
+  }
+
+  .navItem {
+    padding: 0.7rem 0.9rem;
+    gap: 0.6rem;
+    font-size: 0.8rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .icon {
+    min-width: 1.2rem;
+    font-size: 1.1rem;
+  }
+
+  .footer {
+    padding: 1rem 1rem 1.25rem;
+  }
+
+  .signout {
+    padding: 0.75rem 0.85rem;
+    font-size: 0.8rem;
+    gap: 0.5rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .sidebar {
+    display: none;
+  }
+}

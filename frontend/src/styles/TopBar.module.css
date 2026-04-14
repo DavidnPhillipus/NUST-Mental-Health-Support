@@ -1,0 +1,150 @@
+.topBar {
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.title {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.crisisButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1rem;
+  border-radius: 999px;
+  border: 1px solid #fca5a5;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.crisisButton:hover {
+  background: #fee2e2;
+  border-color: #ef4444;
+}
+
+.userPanel {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.userMeta {
+  text-align: right;
+}
+
+.userName {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.userSubtitle {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.userBadge {
+  width: 44px;
+  height: 44px;
+  background: #1e3a8a;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-weight: 700;
+  cursor: pointer;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  text-align: center;
+  line-height: 1;
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .topBar {
+    padding: 0 1.5rem;
+  }
+
+  .title {
+    font-size: 1.2rem;
+  }
+
+  .actions {
+    gap: 0.75rem;
+  }
+}
+
+/* Small Tablet & Large Mobile */
+@media (max-width: 768px) {
+  .topBar {
+    min-height: 60px;
+    padding: 0 1rem;
+  }
+
+  .title {
+    font-size: 1.1rem;
+  }
+
+  .userMeta {
+    display: none;
+  }
+
+  .crisisButton {
+    padding: 0.7rem 0.85rem;
+    font-size: 0.85rem;
+  }
+
+  .crisisButton span:last-child {
+    display: none;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .topBar {
+    min-height: 56px;
+    padding: 0 0.75rem;
+  }
+
+  .title {
+    font-size: 1rem;
+  }
+
+  .actions {
+    gap: 0.5rem;
+  }
+
+  .crisisButton {
+    padding: 0.6rem 0.7rem;
+    font-size: 0.75rem;
+    min-width: 44px;
+    white-space: nowrap;
+  }
+
+  .userPanel {
+    gap: 0.5rem;
+  }
+
+  .userBadge {
+    width: 40px;
+    height: 40px;
+    font-size: 0.85rem;
+  }
+}

@@ -1,0 +1,616 @@
+.page {
+  padding: 2rem 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.brand {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.nav {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.link {
+  border: none;
+  background: transparent;
+  color: #1f2937;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  font-size: 0.95rem;
+}
+
+.link:hover {
+  color: #1e3a8a;
+}
+
+.cta {
+  border: none;
+  border-radius: 999px;
+  padding: 0.85rem 1.35rem;
+  background: #1e3a8a;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  white-space: nowrap;
+}
+
+.cta:hover {
+  background: #1e40af;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 2rem;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.heroCopy {
+  max-width: 560px;
+}
+
+.badge {
+  display: inline-flex;
+  padding: 0.6rem 1rem;
+  background: #eff6ff;
+  color: #1d4ed8;
+  border-radius: 999px;
+  font-weight: 700;
+  margin-bottom: 1.4rem;
+  font-size: 0.85rem;
+}
+
+.heroCopy h1 {
+  font-size: 3rem;
+  line-height: 1.05;
+  margin: 0;
+}
+
+.heroText {
+  margin: 1.5rem 0;
+  color: #475569;
+  max-width: 42rem;
+  line-height: 1.8;
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.primaryButton,
+.secondaryButton {
+  border: none;
+  border-radius: 999px;
+  padding: 1rem 1.5rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.95rem;
+}
+
+.primaryButton {
+  background: #1e3a8a;
+  color: white;
+}
+
+.primaryButton:hover {
+  background: #1e40af;
+}
+
+.secondaryButton {
+  background: #e2e8f0;
+  color: #1f2937;
+}
+
+.secondaryButton:hover {
+  background: #cbd5e1;
+}
+
+.heroVisual {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.heroCard {
+  width: 100%;
+  padding: 2rem;
+  background: white;
+  border-radius: 2rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 24px 50px rgba(15, 23, 42, 0.08);
+}
+
+.heroCard h2 {
+  margin: 0 0 1rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.heroImage {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  border-radius: 2rem;
+  border: 1px solid #d1d5db;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.featureItem {
+  padding: 2rem;
+  background: white;
+  border-radius: 2rem;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+}
+
+.featureItem:hover {
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+  transform: translateY(-2px);
+}
+
+.featureItem h3 {
+  margin: 0 0 0.75rem;
+  font-weight: 700;
+}
+
+.featureItem p {
+  margin: 0;
+  color: #475569;
+  line-height: 1.6;
+}
+
+.detailSection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.detailCard {
+  padding: 2rem;
+  background: white;
+  border-radius: 2rem;
+  border: 1px solid #e5e7eb;
+}
+
+.detailCard h2 {
+  margin: 0 0 1rem;
+  font-weight: 700;
+  font-size: 1.35rem;
+}
+
+.detailCard p {
+  margin: 0;
+  color: #475569;
+  line-height: 1.8;
+}
+
+.footerCard {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 2.5rem;
+  background: white;
+  border-radius: 2rem;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 3rem;
+}
+
+.footerLinks {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.footerLinks button {
+  border: none;
+  background: transparent;
+  color: #1e3a8a;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.footerLinks button:hover {
+  text-decoration: underline;
+}
+
+.contactSection {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 2rem;
+  padding: 2.5rem;
+  background: #ffffff;
+  border-radius: 2rem;
+  border: 1px solid #e5e7eb;
+}
+
+.contactCopy h2 {
+  margin: 0 0 0.85rem;
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .page {
+    padding: 1.5rem 2rem;
+  }
+
+  .header {
+    margin-bottom: 2rem;
+    gap: 1.5rem;
+  }
+
+  .cta {
+    padding: 0.75rem 1.1rem;
+    font-size: 0.9rem;
+  }
+
+  .hero {
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .heroCopy h1 {
+    font-size: 2.5rem;
+  }
+
+  .heroText {
+    margin: 1.25rem 0;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    padding: 0.9rem 1.3rem;
+  }
+
+  .features {
+    gap: 1.2rem;
+  }
+
+  .featureItem {
+    padding: 1.75rem;
+  }
+
+  .detailSection {
+    gap: 1.25rem;
+  }
+
+  .detailCard {
+    padding: 1.75rem;
+  }
+
+  .contactSection {
+    gap: 1.5rem;
+  }
+}
+
+/* Small Tablet & Large Mobile */
+@media (max-width: 768px) {
+  .page {
+    padding: 1.5rem 1rem;
+  }
+
+  .header {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .nav {
+    gap: 0.75rem;
+  }
+
+  .link {
+    font-size: 0.85rem;
+  }
+
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .heroVisual {
+    justify-content: center;
+  }
+
+  .heroCopy h1 {
+    font-size: 2.2rem;
+  }
+
+  .heroText {
+    font-size: 0.95rem;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    padding: 0.85rem 1.2rem;
+    font-size: 0.9rem;
+  }
+
+  .features {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .detailSection {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .detailCard {
+    padding: 1.5rem;
+  }
+
+  .heroCard {
+    padding: 1.5rem;
+  }
+
+  .footerCard {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.75rem;
+    gap: 1.25rem;
+  }
+
+  .footerLinks {
+    gap: 0.75rem;
+    width: 100%;
+  }
+
+  .contactSection {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 1.75rem;
+  }
+
+  .contactCopy h2 {
+    font-size: 1.25rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .page {
+    padding: 1rem 0.75rem;
+  }
+
+  .header {
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .brand {
+    font-size: 1.1rem;
+  }
+
+  .nav {
+    gap: 0.5rem;
+  }
+
+  .link {
+    font-size: 0.75rem;
+    padding: 0.4rem;
+  }
+
+  .cta {
+    padding: 0.6rem 0.9rem;
+    font-size: 0.8rem;
+    border-radius: 0.6rem;
+  }
+
+  .hero {
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .heroCopy h1 {
+    font-size: 1.8rem;
+    line-height: 1.2;
+  }
+
+  .badge {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.85rem;
+    margin-bottom: 1rem;
+  }
+
+  .heroText {
+    font-size: 0.9rem;
+    margin: 1rem 0;
+  }
+
+  .heroActions {
+    gap: 0.75rem;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    padding: 0.7rem 1rem;
+    font-size: 0.8rem;
+    border-radius: 0.6rem;
+  }
+
+  .featureItem {
+    padding: 1.25rem;
+    border-radius: 1.25rem;
+  }
+
+  .featureItem h3 {
+    font-size: 0.95rem;
+  }
+
+  .featureItem p {
+    font-size: 0.85rem;
+  }
+
+  .detailCard {
+    padding: 1.25rem;
+  }
+
+  .detailCard h2 {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .detailCard p {
+    font-size: 0.85rem;
+  }
+
+  .heroCard {
+    padding: 1.25rem;
+  }
+
+  .heroCard h2 {
+    font-size: 1.15rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .footerCard {
+    padding: 1.25rem;
+  }
+
+  .footerLinks button {
+    font-size: 0.75rem;
+  }
+
+  .contactSection {
+    padding: 1.25rem;
+  }
+
+  .contactCopy h2 {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .contactCopy p {
+    font-size: 0.85rem;
+  }
+}
+
+.contactDetails {
+  display: grid;
+  gap: 1rem;
+}
+
+.contactDetails div {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.contactDetails span {
+  font-size: 0.85rem;
+  color: #475569;
+}
+
+.contactDetails a {
+  color: #1e3a8a;
+  text-decoration: none;
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 1rem 1.5rem;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    text-align: center;
+  }
+
+  .heroCopy {
+    max-width: none;
+  }
+
+  .heroCopy h1 {
+    font-size: 2rem;
+  }
+
+  .heroText {
+    margin: 1rem 0;
+  }
+
+  .heroActions {
+    justify-content: center;
+  }
+
+  .heroVisual {
+    justify-content: center;
+  }
+
+  .features {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .featureItem {
+    padding: 1.5rem;
+  }
+
+  .footerCard {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+    padding: 2rem 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .footerLinks {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .contactSection {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 2rem 1.5rem;
+  }
+
+  .contactCopy {
+    text-align: center;
+  }
+
+  .contactDetails {
+    justify-content: center;
+  }
+}
