@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  institution_code String? @unique
+  password  String
+  role      String   @default("student")
+  faculty   String?
+  created_at DateTime @default(now())
+  
+  appointments_as_student Appointment[] @relation("StudentAppointments")
+  appointments_as_counsellor Appointment[] @relation("CounsellorAppointments")
+  availability Availability[]
+  mood_logs MoodLog[]
+  session_notes SessionNote[]
+}
+
+model Appointment {
+  id             String   @id @default(cuid())
+  student_id     String?
+  counsellor_id  String?
+  student        User?    @relation("StudentAppointments", fields: [student_id], references: [id], onDelete: Cascade)
+  counsellor     User?    @relation("CounsellorAppointments", fields: [counsellor_id], references: [id], onDelete: Cascade)
+  date           String?
+  startTime      String?
+  endTime        String?
+  reason         String?
+  status         String   @default("confirmed")
+  created_at     DateTime @default(now())
+  
+  session_notes SessionNote[]
+
+  @@index([student_id])
+  @@index([counsellor_id])
+  @@index([date])
+}
+
+model MoodLog {
+  id         String   @id @default(cuid())
+  student_id String?
+  user       User?    @relation(fields: [student_id], references: [id])
+  date       String?
+  mood       String?
+  sleep      String?
+  appetite   String?
+  energy     String?
+  stress     String?
+  notes      String?
+  created_at DateTime @default(now())
+
+  @@index([student_id])
+  @@index([date])
+}
+
+model Resource {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  type        String   @default("article")
+  url         String?
+  created_at  DateTime @default(now())
+}
+
+model SessionNote {
+  id             String   @id @default(cuid())
+  appointment_id String?
+  appointment    Appointment? @relation(fields: [appointment_id], references: [id])
+  counsellor_id  String?
+  counsellor     User?    @relation(fields: [counsellor_id], references: [id])
+  date           String?
+  notes          String?
+  created_at     DateTime @default(now())
+
+  @@index([appointment_id])
+  @@index([counsellor_id])
+}
+
+model Availability {
+  id            String   @id @default(cuid())
+  counsellor_id String?
+  counsellor    User?    @relation(fields: [counsellor_id], references: [id])
+  date          String?
+  startTime     String?
+  endTime       String?
+  created_at    DateTime @default(now())
+
+  @@index([counsellor_id])
+  @@index([date])
+}
