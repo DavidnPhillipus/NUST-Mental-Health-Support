@@ -71,3 +71,84 @@ export async function updateProfile(req, res) {
   }
 }
 
+export async function deleteProfile(req, res) {
+  const requesterId = req.user?.userId || req.user?.id
+  if (!requesterId) return res.status(401).json({ error: 'Not authenticated' })
+
+  const targetUserId = req.params.id
+  if (!targetUserId) {
+    return res.status(400).json({ error: 'User id is required' })
+  }
+
+  try {
+    const requester = await prisma.user.findUnique({
+      where: { id: requesterId },
+      select: { id: true, role: true },
+    })
+
+    if (!requester) {
+      return res.status(401).json({ error: 'Requester not found' })
+    }
+
+    if (requester.role !== 'admin') {
+      return res.status(403).json({ error: 'Only admins can delete users' })
+    }
+
+    if (requester.id === targetUserId) {
+      return res.status(400).json({ error: 'Admin cannot delete their own account' })
+    }
+
+    const target = await prisma.user.findUnique({
+      where: { id: targetUserId },
+      select: { id: true },
+    })
+
+    if (!target) {
+      return res.status(404).json({ error: 'User not found' })
+    }
+
+    await prisma.$transaction(async (tx) => {
+      await tx.sessionNote.deleteMany({
+        where: {
+          OR: [
+            { counsellor_id: targetUserId },
+            {
+              appointment: {
+                OR: [
+                  { student_id: targetUserId },
+                  { counsellor_id: targetUserId },
+                ],
+              },
+            },
+          ],
+        },
+      })
+
+      await tx.appointment.deleteMany({
+        where: {
+          OR: [
+            { student_id: targetUserId },
+            { counsellor_id: targetUserId },
+          ],
+        },
+      })
+
+      await tx.availability.deleteMany({
+        where: { counsellor_id: targetUserId },
+      })
+
+      await tx.moodLog.deleteMany({
+        where: { student_id: targetUserId },
+      })
+
+      await tx.user.delete({
+        where: { id: targetUserId },
+      })
+    })
+
+    return res.json({ success: true })
+  } catch (error) {
+    return res.status(500).json({ error: error.message })
+  }
+}
+

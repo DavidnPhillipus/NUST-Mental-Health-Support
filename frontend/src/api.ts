@@ -154,3 +154,10 @@ export async function updateProfile(profile: any, token: string, userId?: string
     body: JSON.stringify(profile),
   })
 }
+
+export async function deleteProfile(profileId: string, token: string, userId?: string) {
+  return fetchJson(`/api/profiles/${profileId}`, {
+    method: 'DELETE',
+    headers: authHeader(token, userId),
+  })
+}

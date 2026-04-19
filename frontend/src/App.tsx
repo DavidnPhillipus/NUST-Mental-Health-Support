@@ -335,6 +335,19 @@ function App() {
     }
   }
 
+  const handleDeleteUser = async (userId: string) => {
+    if (!authToken) {
+      throw new Error('Not authenticated')
+    }
+
+    await api.deleteProfile(userId, authToken, currentUser.id)
+    setUsers(prev => prev.filter(user => user.id !== userId))
+    setAppointments(prev => prev.filter(a => a.student_id !== userId && a.counsellor_id !== userId))
+    setAvailability(prev => prev.filter(a => a.counsellor_id !== userId))
+    setMoodLogs(prev => prev.filter(m => m.student_id !== userId))
+    setSessionNotes(prev => prev.filter(n => n.counsellor_id !== userId))
+  }
+
   const handleUpdateAppointment = async (appointment: Appointment) => {
     setAppointments(prev => prev.map(a => (a.id === appointment.id ? { ...a, ...appointment } : a)))
 
@@ -368,6 +381,7 @@ function App() {
     onDeleteAvailability: handleDeleteAvailability,
     onUpdateAvailability: handleUpdateAvailability,
     onUpdateUser: handleUpdateUser,
+    onDeleteUser: handleDeleteUser,
   }
 
   if (view === 'landing') {

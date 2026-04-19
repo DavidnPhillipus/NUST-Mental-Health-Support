@@ -24,6 +24,7 @@ export type ScreenContext = {
   onDeleteAvailability(availabilityId: string): void
   onUpdateAvailability(availabilityId: string, updates: Partial<Omit<Availability, 'id'>>): void
   onUpdateUser(user: User): void
+  onDeleteUser(userId: string): Promise<void>
 }
 
 export type ScreenDefinition = {
