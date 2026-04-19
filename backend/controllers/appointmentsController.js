@@ -91,7 +91,7 @@ export async function createAppointment(req, res) {
         startTime,
         endTime,
         reason: reason || '',
-        status: 'confirmed',
+        status: 'pending',
       },
       include: {
         student: true,
@@ -107,15 +107,55 @@ export async function createAppointment(req, res) {
 
 export async function updateAppointment(req, res) {
   const { id } = req.params
-  const { status, reason } = req.body
+  const userId = req.user?.userId || req.user?.id
+  const { status, reason, urgent, flagged_by } = req.body
+
+  if (!userId) {
+    return res.status(401).json({ error: 'Not authenticated' })
+  }
 
   try {
-    const appointment = await prisma.appointment.update({
+    const appointment = await prisma.appointment.findUnique({
       where: { id },
-      data: { ...(status && { status }), ...(reason && { reason }) },
+      include: { counsellor: true, student: true },
+    })
+
+    if (!appointment) {
+      return res.status(404).json({ error: 'Appointment not found' })
+    }
+
+    const isCounsellorOwner = appointment.counsellor_id === userId
+    const isStudentOwner = appointment.student_id === userId
+
+    if (!isCounsellorOwner && !isStudentOwner) {
+      return res.status(403).json({ error: 'Not allowed to update this appointment' })
+    }
+
+    if (status === 'confirmed' && !isCounsellorOwner) {
+      return res.status(403).json({ error: 'Only the assigned counsellor can accept appointments' })
+    }
+
+    if (status === 'completed' && !isCounsellorOwner) {
+      return res.status(403).json({ error: 'Only the assigned counsellor can complete appointments' })
+    }
+
+    if (status === 'cancelled' && !isCounsellorOwner && !isStudentOwner) {
+      return res.status(403).json({ error: 'Only appointment participants can cancel/reject appointments' })
+    }
+
+    const data = {
+      ...(status && { status }),
+      ...(reason !== undefined && { reason }),
+      ...(urgent !== undefined && { urgent }),
+      ...(flagged_by !== undefined && { flagged_by }),
+    }
+
+    const updatedAppointment = await prisma.appointment.update({
+      where: { id },
+      data,
       include: { student: true, counsellor: true },
     })
-    res.json(appointment)
+    res.json(updatedAppointment)
   } catch (error) {
     console.error('Update appointment error:', error)
     res.status(500).json({ error: error.message })
