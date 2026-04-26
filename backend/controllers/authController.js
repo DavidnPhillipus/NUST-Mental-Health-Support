@@ -1,5 +1,7 @@
 import prisma from '../services/prismaClient.js'
 
+const STUDENT_EMAIL_REGEX = /^\d{9}@nust\.na$/i
+
 function generateToken() {
   return 'token_' + Math.random().toString(36).substr(2, 21) + Date.now().toString(36)
 }
@@ -54,8 +56,14 @@ export async function login(req, res) {
 
 export async function registerUser(req, res) {
   const { email, password, name, role, faculty, institution_code } = req.body
-  if (!email || !password || !name || !role) {
+  const normalizedEmail = typeof email === 'string' ? email.trim().toLowerCase() : ''
+
+  if (!normalizedEmail || !password || !name || !role) {
     return res.status(400).json({ error: 'Missing required fields' })
+  }
+
+  if (role === 'student' && !STUDENT_EMAIL_REGEX.test(normalizedEmail)) {
+    return res.status(400).json({ error: 'Students must register with a valid NUST student email (e.g. 224068199@nust.na)' })
   }
 
   if ((role === 'student' || role === 'counsellor') && !institution_code) {
@@ -63,7 +71,7 @@ export async function registerUser(req, res) {
   }
 
   try {
-    const existing = await prisma.user.findUnique({ where: { email } })
+    const existing = await prisma.user.findUnique({ where: { email: normalizedEmail } })
     if (existing) {
       return res.status(400).json({ error: 'Email already registered' })
     }
@@ -71,7 +79,7 @@ export async function registerUser(req, res) {
     const user = await prisma.user.create({
       data: {
         name,
-        email,
+        email: normalizedEmail,
         institution_code: institution_code || null,
         password,
         role,

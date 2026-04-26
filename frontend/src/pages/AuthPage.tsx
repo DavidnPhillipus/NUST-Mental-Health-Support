@@ -45,6 +45,10 @@ export default function AuthPage({ mode, initialRole, authError, onSubmit, onSwi
       ? 'Counsellor Code'
       : 'Admin Code'
 
+  const emailPlaceholder = mode === 'register' && role === 'student'
+    ? 'e.g. 222222222@nust.na'
+    : 'name@domain.com'
+
   return (
     <div className={styles.container}>
       <button type="button" className={styles.backButton} onClick={onBack}>
@@ -67,7 +71,8 @@ export default function AuthPage({ mode, initialRole, authError, onSubmit, onSwi
 
           <label className={styles.field}>
             <span>Email</span>
-            <input value={email} onChange={event => setEmail(event.target.value)} type="email" placeholder="name@domain.com" required />
+            <input value={email} onChange={event => setEmail(event.target.value)} type="email" placeholder={emailPlaceholder} required />
+            {mode === 'register' && role === 'student' && <small>Use your NUST student email format, e.g. 222222222@nust.na.</small>}
           </label>
 
           <label className={styles.field}>

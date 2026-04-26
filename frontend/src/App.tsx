@@ -82,6 +82,8 @@ type AppView = 'landing' | 'auth' | 'app'
 
 type AuthMode = 'login' | 'register'
 
+const STUDENT_EMAIL_REGEX = /^\d{9}@nust\.na$/i
+
 type AuthFormData = {
   mode: AuthMode
   name: string
@@ -227,9 +229,14 @@ function App() {
         return
       }
 
+      if (data.role === 'student' && !STUDENT_EMAIL_REGEX.test(data.email.trim())) {
+        setAuthError('Students must register with a valid NUST student email (e.g. 224068199@nust.na).')
+        return
+      }
+
       await api.registerUser({
         name: data.name,
-        email: data.email,
+        email: data.email.trim().toLowerCase(),
         password: data.password,
         role: data.role,
         faculty: data.role === 'student' ? 'Computing' : undefined,
