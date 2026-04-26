@@ -21,6 +21,10 @@ export async function login(req, res) {
       return res.status(401).json({ error: 'Invalid email or password' })
     }
 
+    if (user.active === false) {
+      return res.status(403).json({ error: 'This account has been deactivated' })
+    }
+
     if (role && user.role !== role) {
       return res.status(403).json({ error: `Wrong role. Expected ${user.role}.` })
     }
@@ -37,6 +41,7 @@ export async function login(req, res) {
         name: user.name,
         email: user.email,
         role: user.role,
+        active: user.active,
         faculty: user.faculty,
         institution_code: user.institution_code,
       },
@@ -86,6 +91,7 @@ export async function registerUser(req, res) {
         name: user.name,
         email: user.email,
         role: user.role,
+        active: user.active,
         faculty: user.faculty,
         institution_code: user.institution_code,
       },
@@ -116,6 +122,7 @@ export async function getProfile(req, res) {
       name: user.name,
       email: user.email,
       role: user.role,
+      active: user.active,
       faculty: user.faculty,
       institution_code: user.institution_code,
     })

@@ -14,6 +14,7 @@ model User {
   institution_code String? @unique
   password  String
   role      String   @default("student")
+  active    Boolean  @default(true)
   faculty   String?
   created_at DateTime @default(now())
   
@@ -35,6 +36,8 @@ model Appointment {
   endTime        String?
   reason         String?
   status         String   @default("confirmed")
+  urgent         Boolean  @default(false)
+  flagged_by     String?
   created_at     DateTime @default(now())
   
   session_notes SessionNote[]
@@ -66,6 +69,8 @@ model Resource {
   title       String
   description String?
   type        String   @default("article")
+  category    String   @default("general")
+  approval_status String @default("pending")
   url         String?
   created_at  DateTime @default(now())
 }

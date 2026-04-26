@@ -3,6 +3,7 @@ import styles from '../../styles/Content.module.css'
 
 export default function AppointmentCalendar({ context }: { context: ScreenContext }) {
   const myAppointments = context.appointments.filter(a => a.counsellor_id === context.currentUser.id)
+  const pendingAppointments = myAppointments.filter(a => a.status === 'pending')
   const urgentAppointments = myAppointments.filter(a => a.urgent && a.status === 'confirmed')
   const confirmedAppointments = myAppointments.filter(a => a.status === 'confirmed')
   const cancelledAppointments = myAppointments.filter(a => a.status === 'cancelled')
@@ -40,8 +41,100 @@ export default function AppointmentCalendar({ context }: { context: ScreenContex
     })
   }
 
+  const handleAcceptAppointment = (appointment: typeof pendingAppointments[number]) => {
+    context.onUpdateAppointment({
+      ...appointment,
+      status: 'confirmed',
+    })
+  }
+
+  const handleRejectAppointment = (appointment: typeof pendingAppointments[number]) => {
+    const rejectionReason = appointment.reason
+      ? `${appointment.reason} (Rejected by counsellor)`
+      : 'Rejected by counsellor'
+
+    context.onUpdateAppointment({
+      ...appointment,
+      status: 'cancelled',
+      reason: rejectionReason,
+      urgent: false,
+    })
+  }
+
   return (
     <div>
+      <div className={styles.card} style={{ marginBottom: '2rem' }}>
+        <h3 className={styles.cardHeading}>📨 Appointment Requests</h3>
+        <p className={styles.sectionCopy}>Pending requests: {pendingAppointments.length}</p>
+        {pendingAppointments.length === 0 ? (
+          <p className={styles.cardText}>No pending appointment requests</p>
+        ) : (
+          <div className={styles.list}>
+            {pendingAppointments.map(appointment => (
+              <div key={appointment.id} className={styles.listItem} style={{ borderLeft: '4px solid #f59e0b', backgroundColor: '#fffbeb' }}>
+                <div>
+                  <strong style={{ display: 'inline-flex', alignItems: 'center', gap: '0.55rem' }}>
+                    <span
+                      style={{
+                        width: '28px',
+                        height: '28px',
+                        borderRadius: '50%',
+                        background: getAvatarColor(getStudentName(appointment.student_id)),
+                        color: '#fff',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontWeight: 700,
+                        fontSize: '0.75rem',
+                      }}
+                    >
+                      {getInitials(getStudentName(appointment.student_id))}
+                    </span>
+                    {getStudentName(appointment.student_id)}
+                  </strong>
+                  <p>📅 {appointment.date} | 🕐 {appointment.startTime} - {appointment.endTime}</p>
+                  {appointment.reason && <p>💭 Reason: {appointment.reason}</p>}
+                </div>
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <button
+                    type="button"
+                    onClick={() => handleAcceptAppointment(appointment)}
+                    style={{
+                      padding: '0.5rem 1rem',
+                      fontSize: '0.85rem',
+                      borderRadius: '999px',
+                      border: 'none',
+                      background: '#16a34a',
+                      color: 'white',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Accept
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleRejectAppointment(appointment)}
+                    style={{
+                      padding: '0.5rem 1rem',
+                      fontSize: '0.85rem',
+                      borderRadius: '999px',
+                      border: 'none',
+                      background: '#dc2626',
+                      color: 'white',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Reject
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
       {urgentAppointments.length > 0 && (
         <div className={styles.card} style={{ marginBottom: '2rem', borderColor: '#ff6b6b', borderWidth: '2px' }}>
           <h3 className={styles.cardHeading} style={{ color: '#ff6b6b' }}>

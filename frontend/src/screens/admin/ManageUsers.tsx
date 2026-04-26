@@ -2,6 +2,8 @@ import { useRef, useState } from 'react'
 import type { ScreenContext } from '../index'
 import styles from '../../styles/Content.module.css'
 
+const roles = ['student', 'counsellor', 'admin'] as const
+
 export default function ManageUsers({ context }: { context: ScreenContext }) {
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null)
   const toastTimer = useRef<number | null>(null)
@@ -24,6 +26,30 @@ export default function ManageUsers({ context }: { context: ScreenContext }) {
     try {
       await context.onDeleteUser(userId)
       showToast('success', `${userName} was deleted successfully.`)
+    } catch (error) {
+      showToast('error', (error as Error).message)
+    }
+  }
+
+  const handleRoleChange = async (userId: string, nextRole: (typeof roles)[number]) => {
+    const user = context.users.find(entry => entry.id === userId)
+    if (!user) return
+
+    try {
+      await context.onUpdateUser({ ...user, role: nextRole })
+      showToast('success', `${user.name}'s role was updated.`)
+    } catch (error) {
+      showToast('error', (error as Error).message)
+    }
+  }
+
+  const handleToggleActive = async (userId: string) => {
+    const user = context.users.find(entry => entry.id === userId)
+    if (!user) return
+
+    try {
+      await context.onUpdateUser({ ...user, active: user.active === false ? true : false })
+      showToast('success', `${user.name} was ${user.active === false ? 'reactivated' : 'deactivated'}.`)
     } catch (error) {
       showToast('error', (error as Error).message)
     }
@@ -63,21 +89,59 @@ export default function ManageUsers({ context }: { context: ScreenContext }) {
               <tr key={user.id}>
                 <td>{user.name}</td>
                 <td>{user.email}</td>
-                <td>{user.role}</td>
+                <td>
+                  {user.id === context.currentUser.id ? (
+                    user.role
+                  ) : (
+                    <select
+                      className={styles.formSelect}
+                      style={{ margin: 0, minWidth: '9rem', padding: '0.7rem 0.9rem' }}
+                      value={user.role}
+                      onChange={(event) => void handleRoleChange(user.id, event.target.value as (typeof roles)[number])}
+                    >
+                      {roles.map(role => (
+                        <option key={role} value={role}>{role}</option>
+                      ))}
+                    </select>
+                  )}
+                </td>
                 <td>{user.faculty || 'N/A'}</td>
-                <td>Active</td>
+                <td>
+                  <span style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                    padding: '0.35rem 0.8rem',
+                    borderRadius: '999px',
+                    background: user.active === false ? '#fee2e2' : '#dcfce7',
+                    color: user.active === false ? '#991b1b' : '#166534',
+                    fontWeight: 700,
+                  }}>
+                    {user.active === false ? 'Deactivated' : 'Active'}
+                  </span>
+                </td>
                 <td>
                   {user.id === context.currentUser.id ? (
                     <span>Current user</span>
                   ) : (
-                    <button
-                      type="button"
-                      className={styles.buttonSecondary}
-                      style={{ marginTop: 0, padding: '0.5rem 0.85rem', borderColor: '#ef4444', color: '#b91c1c' }}
-                      onClick={() => handleDelete(user.id, user.name)}
-                    >
-                      Delete
-                    </button>
+                    <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                      <button
+                        type="button"
+                        className={styles.buttonSecondary}
+                        style={{ marginTop: 0, padding: '0.5rem 0.85rem' }}
+                        onClick={() => void handleToggleActive(user.id)}
+                      >
+                        {user.active === false ? 'Reactivate' : 'Deactivate'}
+                      </button>
+                      <button
+                        type="button"
+                        className={styles.buttonSecondary}
+                        style={{ marginTop: 0, padding: '0.5rem 0.85rem', borderColor: '#ef4444', color: '#b91c1c' }}
+                        onClick={() => void handleDelete(user.id, user.name)}
+                      >
+                        Delete
+                      </button>
+                    </div>
                   )}
                 </td>
               </tr>

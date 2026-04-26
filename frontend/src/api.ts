@@ -108,6 +108,21 @@ export async function addResource(resource: any, token: string, userId?: string)
   })
 }
 
+export async function updateResource(resourceId: string, resource: any, token: string, userId?: string) {
+  return fetchJson(`/api/resources/${resourceId}`, {
+    method: 'PUT',
+    headers: authHeader(token, userId),
+    body: JSON.stringify(resource),
+  })
+}
+
+export async function deleteResource(resourceId: string, token: string, userId?: string) {
+  return fetchJson(`/api/resources/${resourceId}`, {
+    method: 'DELETE',
+    headers: authHeader(token, userId),
+  })
+}
+
 export async function addSessionNote(sessionNote: any, token: string, userId?: string) {
   return fetchJson('/api/session_notes', {
     method: 'POST',

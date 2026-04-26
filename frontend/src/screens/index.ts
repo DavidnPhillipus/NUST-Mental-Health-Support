@@ -17,13 +17,15 @@ export type ScreenContext = {
   onFeedback(message: string): void
   onAddAppointment(appointment: Omit<Appointment, 'id' | 'created_at'>): void
   onAddMoodLog(moodLog: Omit<MoodLog, 'id' | 'created_at'>): void
-  onAddResource(resource: Omit<Resource, 'id' | 'created_at'>): void
-  onAddSessionNote(sessionNote: Omit<SessionNote, 'id' | 'created_at'>): void
+  onAddResource(resource: Omit<Resource, 'id' | 'created_at'>): Promise<void>
+  onUpdateResource(resource: Resource): Promise<void>
+  onDeleteResource(resourceId: string): Promise<void>
+  onAddSessionNote(sessionNote: Omit<SessionNote, 'id' | 'created_at'>): Promise<void>
   onUpdateAppointment(appointment: Appointment): void
   onAddAvailability(availability: Omit<Availability, 'id' | 'created_at'>): void
   onDeleteAvailability(availabilityId: string): void
   onUpdateAvailability(availabilityId: string, updates: Partial<Omit<Availability, 'id'>>): void
-  onUpdateUser(user: User): void
+  onUpdateUser(user: User): Promise<void>
   onDeleteUser(userId: string): Promise<void>
 }
 

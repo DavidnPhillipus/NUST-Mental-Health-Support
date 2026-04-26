@@ -11,9 +11,12 @@ export default function ResourceLibrary({ context }: { context: ScreenContext })
 
   const filteredResources = useMemo(
     () => context.resources.filter(resource =>
-      resource.title.toLowerCase().includes(query.toLowerCase()) ||
-      resource.description.toLowerCase().includes(query.toLowerCase()) ||
-      resource.type.toLowerCase().includes(query.toLowerCase()),
+      resource.approvalStatus === 'approved' && (
+        resource.title.toLowerCase().includes(query.toLowerCase()) ||
+        resource.description.toLowerCase().includes(query.toLowerCase()) ||
+        resource.type.toLowerCase().includes(query.toLowerCase()) ||
+        resource.category.toLowerCase().includes(query.toLowerCase())
+      ),
     ),
     [context.resources, query],
   )
@@ -70,6 +73,7 @@ export default function ResourceLibrary({ context }: { context: ScreenContext })
         {visibleResources.map(resource => (
           <article key={resource.id} className={styles.resourceCard} onClick={() => resource.url && window.open(resource.url, '_blank')}>
             <span className={styles.resourceLabel}>{resource.type}</span>
+            <span className={styles.resourceLabel} style={{ marginLeft: '0.5rem', background: '#ecfeff', color: '#0f766e' }}>{resource.category}</span>
             <h3 className={styles.resourceTitle}>{resource.title}</h3>
             <p className={styles.resourceText}>{resource.description}</p>
           </article>

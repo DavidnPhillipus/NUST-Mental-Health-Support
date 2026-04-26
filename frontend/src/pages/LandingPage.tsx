@@ -1,5 +1,5 @@
 import styles from '../styles/LandingPage.module.css'
-import heroImage from '../assets/hero.svg'
+import heroImage from '../assets/hero.jpg'
 
 type LandingPageProps = {
   onOpenLogin(): void
@@ -83,7 +83,7 @@ export default function LandingPage({ onOpenLogin, onOpenRegister }: LandingPage
           </div>
           <div>
             <span>Phone</span>
-            <a href="tel:+264824184911">+26482 418 4911</a>
+            <a href="tel:+264824184911">+26481 418 4911</a>
           </div>
         </div>
       </section>

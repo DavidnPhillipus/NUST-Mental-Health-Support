@@ -10,6 +10,7 @@ export type User = {
   institutionCode?: string
   auth_id?: string
   role: Role
+  active?: boolean
   email?: string
   faculty?: string
 }
@@ -19,6 +20,7 @@ export type Profile = {
   display_id: string
   name: string
   role: Role
+  active?: boolean
   email: string
   faculty?: string
 }
@@ -62,6 +64,8 @@ export type Resource = {
   title: string
   description: string
   type: 'article' | 'video' | 'tool'
+  category: string
+  approvalStatus: 'pending' | 'approved'
   url?: string
   created_at?: string
 }

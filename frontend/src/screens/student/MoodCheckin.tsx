@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import type { ScreenContext } from '../index'
 import styles from '../../styles/Content.module.css'
 
@@ -104,6 +104,17 @@ export default function MoodCheckin({ context }: { context: ScreenContext }) {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
   const [advice, setAdvice] = useState<AdviceResult | null>(null)
+  const [showHistory, setShowHistory] = useState(false)
+
+  const pastMoodLogs = useMemo(() => {
+    return context.moodLogs
+      .filter(log => log.student_id === context.currentUser.id)
+      .sort((a, b) => {
+        const aTime = new Date(a.created_at ?? a.date).getTime()
+        const bTime = new Date(b.created_at ?? b.date).getTime()
+        return bTime - aTime
+      })
+  }, [context.moodLogs, context.currentUser.id])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -144,7 +155,17 @@ export default function MoodCheckin({ context }: { context: ScreenContext }) {
 
   return (
     <div className={styles.card}>
-      <p className={styles.sectionCopy}>How are you feeling today?</p>
+      <div className={styles.appointmentRow}>
+        <p className={styles.sectionCopy} style={{ marginBottom: 0 }}>How are you feeling today?</p>
+        <button
+          type="button"
+          className={styles.buttonSecondary}
+          style={{ marginTop: 0 }}
+          onClick={() => setShowHistory(prev => !prev)}
+        >
+          {showHistory ? 'Hide Past Moods' : 'View Past Moods'}
+        </button>
+      </div>
       {message && (
         <div
           style={{
@@ -260,6 +281,34 @@ export default function MoodCheckin({ context }: { context: ScreenContext }) {
           {loading ? '⏳ Submitting...' : '✅ Submit Check-in'}
         </button>
       </form>
+
+      {showHistory && (
+        <div style={{ marginTop: '1.75rem' }}>
+          <h3 style={{ marginBottom: '0.5rem' }}>Past Mood Check-ins</h3>
+          {pastMoodLogs.length === 0 ? (
+            <p className={styles.sectionCopy} style={{ marginBottom: 0 }}>
+              No mood history yet. Submit your first check-in to start tracking trends.
+            </p>
+          ) : (
+            <div className={styles.list}>
+              {pastMoodLogs.map(log => (
+                <article key={log.id} className={styles.listItem}>
+                  <div>
+                    <strong>{new Date(log.date).toLocaleDateString()}</strong>
+                    <p>Mood: {log.mood}</p>
+                    <p>Stress: {log.stress}</p>
+                  </div>
+                  <div>
+                    <p>Sleep: {log.sleep}</p>
+                    <p>Energy: {log.energy}</p>
+                    <p>Appetite: {log.appetite}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   )
 }

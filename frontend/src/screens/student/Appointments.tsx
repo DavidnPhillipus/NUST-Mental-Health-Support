@@ -57,9 +57,9 @@ export default function Appointments({ context }: { context: ScreenContext }) {
         startTime: slot.startTime,
         endTime: slot.endTime,
         reason: reason || '',
-        status: 'confirmed',
+        status: 'pending',
       })
-      setBookingMessage('✅ Appointment booked successfully!')
+      setBookingMessage('✅ Appointment request submitted. Waiting for counsellor response.')
       setSelectedSlot('')
       setReason('')
       setTimeout(() => setBookingMessage(''), 3000)
@@ -68,6 +68,7 @@ export default function Appointments({ context }: { context: ScreenContext }) {
     }
   }
 
+  const pendingAppointments = context.appointments.filter(a => a.student_id === context.currentUser.id && a.status === 'pending')
   const upcoming = context.appointments.filter(a => a.student_id === context.currentUser.id && a.status === 'confirmed')
   const cancelledAppointments = context.appointments.filter(a => a.student_id === context.currentUser.id && a.status === 'cancelled')
   const getCounsellorName = (id: string) => context.users.find(u => u.id === id)?.name || 'Unknown'
@@ -217,6 +218,57 @@ export default function Appointments({ context }: { context: ScreenContext }) {
                 {bookingMessage}
               </div>
             )}
+          </div>
+        )}
+      </div>
+
+      <div className={styles.card} style={{ marginTop: '2rem' }}>
+        <h3 className={styles.cardHeading}>⏳ Pending Requests</h3>
+        {pendingAppointments.length === 0 ? (
+          <p style={{ color: '#999' }}>No pending appointment requests</p>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            {pendingAppointments.map(a => (
+              <div
+                key={a.id}
+                style={{
+                  padding: '1rem',
+                  border: '1px solid #fde68a',
+                  borderRadius: '4px',
+                  backgroundColor: '#fffbeb',
+                }}
+              >
+                <div style={{ fontWeight: '500' }}>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.55rem' }}>
+                    <span
+                      style={{
+                        width: '28px',
+                        height: '28px',
+                        borderRadius: '50%',
+                        background: getAvatarColor(getCounsellorName(a.counsellor_id)),
+                        color: '#fff',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontWeight: 700,
+                        fontSize: '0.75rem',
+                      }}
+                    >
+                      {getInitials(getCounsellorName(a.counsellor_id))}
+                    </span>
+                    {getCounsellorName(a.counsellor_id)}
+                  </span>
+                </div>
+                <div style={{ fontSize: '0.9rem', color: '#666', marginTop: '0.5rem' }}>
+                  📅 {a.date || 'TBD'} • 🕐 {a.startTime || 'TBD'}
+                  {a.endTime && <span> - {a.endTime}</span>}
+                </div>
+                {a.reason && <div style={{ fontSize: '0.85rem', color: '#666', marginTop: '0.35rem' }}>💭 {a.reason}</div>}
+                <div style={{ fontSize: '0.8rem', color: '#92400e', marginTop: '0.5rem', fontWeight: 600 }}>
+                  Waiting for counsellor to accept or reject
+                </div>
+              </div>
+            ))}
           </div>
         )}
       </div>

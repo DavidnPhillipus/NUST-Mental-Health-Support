@@ -37,9 +37,9 @@ const navItems: Record<Role, NavItem[]> = {
 }
 
 const defaultUsers: Record<Role, User> = {
-  student: { id: '', name: 'Guest', role: 'student', email: '', faculty: '' },
-  counsellor: { id: '', name: 'Guest', role: 'counsellor', email: '', faculty: '' },
-  admin: { id: '', name: 'Admin', role: 'admin', email: '', faculty: '' },
+  student: { id: '', name: 'Guest', role: 'student', email: '', faculty: '', active: true },
+  counsellor: { id: '', name: 'Guest', role: 'counsellor', email: '', faculty: '', active: true },
+  admin: { id: '', name: 'Admin', role: 'admin', email: '', faculty: '', active: true },
 }
 
 const defaultResources: Resource[] = []
@@ -114,7 +114,7 @@ function App() {
         api.getResources(token, userId),
         api.getSessionNotes(token, userId),
         api.getAvailability(token, userId),
-        api.getProfiles(token, userId),
+        currentUser.role === 'admin' ? api.getProfiles(token, userId) : Promise.resolve([]),
       ])
 
       setAppointments(Array.isArray(appts) ? appts : [])
@@ -136,6 +136,7 @@ function App() {
     role: profile.role,
     email: profile.email,
     faculty: profile.faculty,
+    active: profile.active,
   })
 
   useEffect(() => {
@@ -166,7 +167,7 @@ function App() {
     }
 
     restoreSession()
-  }, [authToken, currentUser.id])
+  }, [authToken, currentUser.id, currentUser.role])
 
   useEffect(() => {
     if (!authToken || !currentUser.id) return
@@ -176,7 +177,7 @@ function App() {
     }, 15000)
 
     return () => window.clearInterval(refreshTimer)
-  }, [authToken, currentUser.id])
+  }, [authToken, currentUser.id, currentUser.role])
 
   const currentRoleName = roleNames[currentRole]
   const items = navItems[currentRole]
@@ -280,6 +281,25 @@ function App() {
     setResources(prev => [...prev, created])
   }
 
+  const handleUpdateResource = async (resource: Resource) => {
+    if (!authToken) return
+    const updated = await api.updateResource(resource.id, {
+      title: resource.title,
+      description: resource.description,
+      type: resource.type,
+      category: resource.category,
+      approvalStatus: resource.approvalStatus,
+      url: resource.url ?? '',
+    }, authToken, currentUser.id)
+    setResources(prev => prev.map(existing => (existing.id === resource.id ? updated : existing)))
+  }
+
+  const handleDeleteResource = async (resourceId: string) => {
+    if (!authToken) return
+    await api.deleteResource(resourceId, authToken, currentUser.id)
+    setResources(prev => prev.filter(resource => resource.id !== resourceId))
+  }
+
   const handleAddSessionNote = async (sessionNote: Omit<SessionNote, 'id' | 'created_at'>) => {
     if (!authToken) return
     const created = await api.addSessionNote(sessionNote, authToken, currentUser.id)
@@ -321,17 +341,27 @@ function App() {
   }
 
   const handleUpdateUser = async (user: User) => {
-    const nextUser = { ...user, auth_id: user.auth_id ?? user.id }
-    setCurrentUser(nextUser)
     if (!authToken) return
-    const updated = await api.updateProfile({
+    const payload: Record<string, unknown> = {
+      id: user.id,
       name: user.name,
       faculty: user.faculty ?? null,
       institution_code: user.institutionCode ?? null,
-    }, authToken, currentUser.id)
+    }
+
+    if (user.id !== currentUser.id) {
+      payload.role = user.role
+      payload.active = user.active
+    }
+
+    const updated = await api.updateProfile(payload, authToken, currentUser.id)
     if (updated) {
-      saveSession(authToken, nextUser)
+      const nextUser = { ...user, active: updated.active ?? user.active, auth_id: user.auth_id ?? user.id }
       setUsers(prev => prev.map(u => (u.id === user.id ? { ...u, ...nextUser } : u)))
+      if (user.id === currentUser.id) {
+        setCurrentUser(nextUser)
+        saveSession(authToken, nextUser)
+      }
     }
   }
 
@@ -375,6 +405,8 @@ function App() {
     onAddAppointment: handleAddAppointment,
     onAddMoodLog: handleAddMoodLog,
     onAddResource: handleAddResource,
+    onUpdateResource: handleUpdateResource,
+    onDeleteResource: handleDeleteResource,
     onAddSessionNote: handleAddSessionNote,
     onUpdateAppointment: handleUpdateAppointment,
     onAddAvailability: handleAddAvailability,
